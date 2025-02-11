@@ -1,22 +1,22 @@
 <?php
-websitebox_bootstrap();
+add_action( 'init', 'websitebox_bootstrap' );
 
 add_filter( 'cron_schedules', 'websitebox_add_cron_interval' );
-
+add_action( 'websitebox_cronhook','websitebox_cronexec' );
 function websitebox_add_cron_interval( $schedules ) {
-   $schedules['ten_seconds'] = array(
-      'interval' => 600,
-      'display'  => esc_html__( 'Every Five Seconds' ),
+   
+   $schedules['five_minutes'] = array(
+      'interval' => 300,
+      'display'  => esc_html__( 'Every Five Minutes' ),
    );
-
    return $schedules;
 }
 function websitebox_bootstrap() {
-    add_action( 'websitebox_cronhook','websitebox_cronexec' );
     
-	 if(!wp_next_scheduled( 'websitebox_cronhook' )){
-        wp_schedule_event( strtotime(current_time('Y-m-d H:i:00',1)), 'ten_seconds', 'websitebox_cronhook' );
+	if(!wp_next_scheduled( 'websitebox_cronhook' )){
+        wp_schedule_event( time(), 'five_minutes', 'websitebox_cronhook' );
     }
+    
 }
 
 function websitebox_cronexec() {
@@ -28,6 +28,7 @@ function websitebox_cronexec() {
 			20
 		)
 	);
+	
 	if ( ! count( $scheduled_ids ) ) {
 		return;
 	}

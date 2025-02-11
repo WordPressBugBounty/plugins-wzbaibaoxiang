@@ -1,7 +1,6 @@
 <?php
 class websitebox_youhua{
     function __construct($data) {
-        
         $this->websitebox_youhua_type($data);
     }
     public function websitebox_youhua_type($data){
